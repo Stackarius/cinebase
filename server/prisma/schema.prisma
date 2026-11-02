@@ -1,0 +1,95 @@
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ==========================================
+// ENUMS
+// ==========================================
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+// ==========================================
+// USER
+// ==========================================
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  name         String
+  email        String   @unique
+  ashiri       String
+  role         UserRole @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  watchlist     Watchlist[]
+  ratings       Rating[]
+  refreshTokens RefreshToken[]
+
+  @@map("users")
+}
+
+// ==========================================
+// WATCHLIST
+// ==========================================
+
+model Watchlist {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  tmdbMovieId Int
+  addedAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tmdbMovieId])
+  @@index([userId])
+  @@map("watchlists")
+}
+
+// ==========================================
+// RATINGS
+// ==========================================
+
+model Rating {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  tmdbMovieId Int
+  rating      Decimal  @db.Decimal(3, 1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tmdbMovieId])
+  @@index([userId])
+  @@map("ratings")
+}
+
+// ==========================================
+// REFRESH TOKENS
+// ==========================================
+
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
+  tokenHash String    @unique
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
