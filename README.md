@@ -1,295 +1,187 @@
-# Cinebase 🎬
+# Cinebase
 
-**Discover movies. Build your watchlist. Keep track of what you love.**
+Cinebase is a movie discovery app for browsing TMDB titles, inspecting film details, and keeping a personal watchlist. The React client talks to the Express API; the API owns authentication and user data, and proxies movie data from TMDB.
 
-Cinebase is a full-stack movie discovery platform that allows users to explore movies, discover trending titles, search for films, manage personal watchlists, and rate movies.
+## What works today
 
-The platform uses [The Movie Database (TMDB)](https://www.themoviedb.org/) API as its external movie data provider, while providing its own authentication system, user management, and personalized features.
+- **Home (`/`)** — features and popular movies from the server.
+- **Discover (`/discover`)** — search movies or browse popular results with pagination. Search terms are shareable as URL query parameters.
+- **Movie details (`/movies/:movieId`)** — movie overview, rating, genres, runtime, cast, and a YouTube trailer when TMDB has one. Opening a title records it in the browser's recent history.
+- **Recently viewed (`/recent`)** — the most recent 20 movie details opened in the current browser profile. This is local browser storage, not a cross-device account feature.
+- **Watchlist (`/watchlist`)** — saved TMDB movie IDs stored for the signed-in account. Add a movie from its detail page or the home feature carousel; remove it from this page.
+- **Settings (`/settings`)** — view and update the signed-in account's name and email.
+- **Authentication** — registration, login, protected pages, refresh-token rotation, and logout use secure server-managed cookies.
 
-> **Project Status:** In Development 🚧
+The watchlist and profile are account-backed. Movie metadata and imagery come from TMDB. Recent history intentionally stays in local storage.
 
-## ✨ Features
+## Technology
 
-### Authentication & User Management
-- User registration and login.
-- Secure password hashing.
-- JWT-based authentication.
-- Protected API endpoints.
-- Refresh token management.
-- User profile management.
-
-### Movie Discovery
-- Browse trending movies.
-- Explore popular and top-rated movies.
-- Search for movies.
-- View detailed movie information.
-- Explore movie genres.
-- Discover movie casts and crew.
-
-### Personalization
-- Add movies to a personal watchlist.
-- Remove movies from watchlists.
-- Rate movies.
-- Track watched movies.
-- Manage personal movie collections.
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
+| Area | Technology |
 |---|---|
-| Frontend | React + TypeScript |
-| Build Tool | Vite |
-| Backend | Node.js + Express |
-| Language | TypeScript |
-| Database | PostgreSQL |
-| ORM | Prisma |
-| Authentication | JWT + bcryptjs |
-| Validation | Zod |
-| External API | TMDB API |
-| HTTP Client | Axios |
+| Client | React, TypeScript, Vite, React Router, Tailwind CSS |
+| Server | Node.js, Express, TypeScript |
+| Database | PostgreSQL, Prisma |
+| Authentication | HttpOnly access and refresh cookies, JWT, Argon2id password hashing |
+| Movie provider | TMDB API |
+| HTTP client | Axios |
 
-## 🏗️ Architecture
-
-Cinebase follows a modular monolithic architecture with separate frontend and backend applications.
-
-```text
-                 ┌──────────────────┐
-                 │   React Client   │
-                 │   TypeScript     │
-                 └────────┬─────────┘
-                          │
-                     HTTP / JSON
-                          │
-                 ┌────────▼─────────┐
-                 │  Express Server  │
-                 │   TypeScript     │
-                 └────────┬─────────┘
-                          │
-             ┌────────────┴────────────┐
-             │                         │
-      ┌──────▼──────┐          ┌───────▼──────┐
-      │ PostgreSQL  │          │  TMDB API    │
-      │   Prisma    │          │ Movie Data   │
-      └─────────────┘          └──────────────┘
-```
-
-The backend handles authentication, authorization, application logic, database operations, and communication with TMDB. The frontend communicates exclusively with the backend API.
-
-## 📁 Project Structure
+## Repository layout
 
 ```text
 cinebase/
-│
 ├── client/
-│   ├── public/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── layouts/
-│   │   ├── hooks/
-│   │   ├── services/
-│   │   ├── context/
-│   │   ├── types/
-│   │   ├── utils/
-│   │   ├── App.tsx
-│   │   └── main.tsx
-│   └── package.json
-│
+│   └── src/
+│       ├── components/       # Layout and reusable UI
+│       ├── features/
+│       │   ├── auth/         # Login, registration, auth API
+│       │   ├── home/         # Home and library pages
+│       │   ├── movies/       # Movie API, types, details, recent history
+│       │   ├── users/        # Profile API
+│       │   └── watchlist/    # Watchlist API and toggle control
+│       ├── lib/              # Axios client and refresh handling
+│       └── routes/
 ├── server/
-│   ├── prisma/
-│   │   ├── schema.prisma
-│   │   └── migrations/
-│   │
-│   ├── src/
-│   │   ├── config/
-│   │   ├── middlewares/
-│   │   ├── modules/
-│   │   │   ├── auth/
-│   │   │   ├── users/
-│   │   │   ├── movies/
-│   │   │   └── watchlist/
-│   │   ├── utils/
-│   │   ├── app.ts
-│   │   └── server.ts
-│   │
-│   ├── prisma.config.ts
-│   └── package.json
-│
+│   ├── prisma/               # Database schema and migrations
+│   └── src/
+│       ├── config/           # Environment, database, TMDB clients
+│       ├── middlewares/      # Authentication and request validation
+│       └── modules/          # Auth, movies, and user endpoints
+├── IMPLEMENTATION_PLAN.md
 └── README.md
 ```
 
-## ⚙️ Getting Started
+## Run locally
 
 ### Prerequisites
 
-Ensure you have the following installed:
+- Node.js LTS and pnpm (or Corepack-enabled Node.js)
+- PostgreSQL (local or a [Neon](https://neon.tech) database)
+- A TMDB API Read Access Token
 
-- Node.js (LTS)
-- npm
-- PostgreSQL
-- Git
-- A TMDB account for API credentials
+### 1. Configure the server
 
-### 1. Clone the repository
+From the repository root:
 
-```bash
-git clone <your-repository-url>
-cd cinebase
-```
-
-### 2. Set up the backend
-
-```bash
+```powershell
 cd server
-npm install
+pnpm install
 ```
 
-Create a `.env` file inside the `server` directory:
+Create `server/.env` with:
 
 ```env
 PORT=5000
 NODE_ENV=development
-
-DATABASE_URL="postgresql://postgres:password@localhost:5432/cinebase?schema=public"
-
-JWT_SECRET="your_access_token_secret"
-JWT_REFRESH_SECRET="your_refresh_token_secret"
-
+# Pooled connection string (runtime)
+DATABASE_URL="postgresql://USER:PASSWORD@ep-xxxx-pooler.REGION.aws.neon.tech/neondb?sslmode=require"
+# Direct connection string (Prisma Migrate/introspection)
+DIRECT_URL="postgresql://USER:PASSWORD@ep-xxxx.REGION.aws.neon.tech/neondb?sslmode=require"
 TMDB_ACCESS_TOKEN="your_tmdb_api_read_access_token"
-
+JWT_SECRET="use-a-long-random-secret"
+JWT_EXPIRES_IN="15m"
+JWT_REFRESH_SECRET="use-a-different-long-random-secret"
 CLIENT_URL="http://localhost:5173"
 ```
 
-Replace the placeholder values with your actual credentials.
+Use unique random values for the JWT secrets; never commit `.env` or real credentials. `JWT_REFRESH_SECRET` is required by server configuration. The current refresh-token implementation stores hashed, random refresh tokens in the database and rotates them on use.
 
-### 3. Set up the database
+#### Using Neon
 
-Create a PostgreSQL database named `cinebase`.
+1. Create a project and database in the Neon console.
+2. Copy both connection strings from **Connect**: use the **pooled** string for `DATABASE_URL` and the **direct** string for `DIRECT_URL`. Keep `sslmode=require`.
+3. Apply the committed migrations with the direct connection, then generate the client:
 
-Run Prisma migrations:
-
-```bash
-npx prisma migrate dev --name init
+```powershell
+pnpm db:migrate
+pnpm db:generate
 ```
 
-Generate the Prisma Client:
+For local PostgreSQL, set `DATABASE_URL` to the local database and omit `DIRECT_URL`. Prisma falls back to `DATABASE_URL` when `DIRECT_URL` is not set. During active schema development, use `pnpm db:migrate:dev` to create new migration files.
 
-```bash
-npx prisma generate
+Start the API in the `server` directory:
+
+```powershell
+pnpm dev
 ```
 
-### 4. Start the backend
+The API listens on `http://localhost:5000`; health can be checked at `http://localhost:5000/api/health`.
 
-```bash
-npm run dev
-```
+### 2. Configure and run the client
 
-The backend should be available at:
+In another terminal:
 
-`http://localhost:5000`
-
-### 5. Set up the frontend
-
-Open another terminal:
-
-```bash
+```powershell
 cd client
-npm install
+pnpm install
 ```
 
-Create a `.env` file inside the `client` directory:
+Create `client/.env`:
 
 ```env
 VITE_API_URL=http://localhost:5000/api
 ```
 
-Start the frontend:
+Start the client:
 
-```bash
-npm run dev
+```powershell
+pnpm dev
 ```
 
-The frontend should be available at:
+Vite prints the local client URL (normally `http://localhost:5173`). The server's CORS origin is currently configured for that development URL.
 
-`http://localhost:5173`
+### 3. Build and lint
 
-## 🔌 API Overview
+Run commands in their respective package directories:
 
-Planned API endpoints:
+```powershell
+pnpm build
+pnpm lint
+```
+
+The server package currently provides a TypeScript build but does not define a lint script.
+
+## API
+
+Authenticated endpoints require the server's access cookie. The client sends cookies with requests and retries a failed protected request once after refreshing an expired access cookie.
 
 ### Authentication
 
-| Method | Endpoint | Description |
+| Method | Path | Purpose |
 |---|---|---|
-| POST | `/api/auth/register` | Register a new user |
-| POST | `/api/auth/login` | Authenticate a user |
-| POST | `/api/auth/refresh` | Refresh access token |
-| POST | `/api/auth/logout` | Revoke refresh token |
-| GET | `/api/auth/me` | Get authenticated user |
+| `POST` | `/api/auth/register` | Create an account and set auth cookies |
+| `POST` | `/api/auth/login` | Authenticate and set auth cookies |
+| `POST` | `/api/auth/refresh` | Rotate refresh token and issue a new access cookie |
+| `POST` | `/api/auth/logout` | Revoke refresh token and clear auth cookies |
 
-### Movies
+### Movies (authenticated)
 
-| Method | Endpoint | Description |
+| Method | Path | Purpose |
 |---|---|---|
-| GET | `/api/movies/trending` | Get trending movies |
-| GET | `/api/movies/popular` | Get popular movies |
-| GET | `/api/movies/top-rated` | Get top-rated movies |
-| GET | `/api/movies/search` | Search movies |
-| GET | `/api/movies/:id` | Get movie details |
-| GET | `/api/movies/:id/cast` | Get movie cast |
+| `GET` | `/api/movies?page=1` | Popular movies |
+| `GET` | `/api/movies/search?query=...&page=1` | Search TMDB movies |
+| `GET` | `/api/movies/:id` | Movie details, credits, and videos |
 
-### Watchlist
+### User profile and watchlist (authenticated)
 
-| Method | Endpoint | Description |
+| Method | Path | Purpose |
 |---|---|---|
-| GET | `/api/watchlist` | Get personal watchlist |
-| POST | `/api/watchlist` | Add a movie |
-| DELETE | `/api/watchlist/:id` | Remove a movie |
+| `GET` | `/api/users/profile` | Read the current profile |
+| `PATCH` | `/api/users/profile` | Update name and/or email |
+| `GET` | `/api/users/watchlist` | List saved TMDB IDs and save dates |
+| `POST` | `/api/users/watchlist` | Add `{ "tmdbMovieId": 123 }`; idempotent for a repeated ID |
+| `DELETE` | `/api/users/watchlist/:tmdbMovieId` | Remove a saved movie |
 
-### Ratings
+The server validates request inputs and scopes watchlist operations to the authenticated user. It stores movie IDs rather than copying TMDB metadata; the client asks the movie endpoint for current titles and images.
 
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/api/ratings` | Get personal ratings |
-| POST | `/api/ratings` | Rate a movie |
-| PATCH | `/api/ratings/:id` | Update a rating |
-| DELETE | `/api/ratings/:id` | Delete a rating |
+## Security and operational notes
 
-*These endpoints describe the planned API contract and may change during development.*
+- TMDB credentials and database/JWT secrets belong only in the server environment.
+- Passwords are hashed with Argon2id. Access and refresh cookies are HttpOnly; the refresh cookie is scoped to `/api/auth`.
+- When an API request returns `401`, the client shares one refresh request between concurrent failures, retries the original request once, and sends the user to login if refresh is rejected.
+- The database enforces a unique `(userId, tmdbMovieId)` watchlist entry.
+- Recent history is device/browser-specific and can be cleared from the Recent page.
+- TMDB supplies movie metadata and images. Cinebase is not endorsed or certified by TMDB.
 
-## 🔐 Security Considerations
+## Current scope and next steps
 
-- Passwords are hashed before storage.
-- Protected endpoints require authentication.
-- Authorization is enforced on user-specific resources.
-- Sensitive credentials are stored in environment variables.
-- Request payloads are validated before processing.
-- Rate limiting is applied to sensitive endpoints.
-- TMDB credentials are never exposed to the frontend.
-
-## 🎯 Project Objectives
-
-Cinebase is also a backend engineering learning project focused on:
-
-- Building RESTful APIs.
-- Understanding authentication and authorization.
-- Designing relational database schemas.
-- Working with Prisma ORM.
-- Integrating third-party APIs.
-- Implementing middleware and centralized error handling.
-- Handling asynchronous operations and external API failures.
-- Writing maintainable, modular backend code.
-- Testing and documenting APIs.
-
-## 🎬 TMDB Attribution
-
-This product uses the TMDB API but is not endorsed or certified by TMDB.
-
-Movie metadata and images are provided by [The Movie Database (TMDB)](https://www.themoviedb.org/).
-
-## 📌 License
-
-This project is currently developed for educational and portfolio purposes.
-
-A formal license will be added when the project is ready for release.
+Ratings, profile avatars, watched status, trending/top-rated categories, and server-synchronized recent history do not yet have end-to-end UI/API support. See [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) for the page wiring details, acceptance checks, and follow-on work.
