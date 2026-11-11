@@ -126,6 +126,10 @@ logs
 node_modules
 bower_components
 
+# Prisma generated client
+server/generated/
+server/src/generated/
+
 *.sublime*
 
 psd
