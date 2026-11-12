@@ -12,15 +12,11 @@ const app: Express = express();
 
 //GLOBAL MIDDLEWARE
 app.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
+  origin: env.CLIENT_URL.replace(/\/+$/, ""),
+  credentials: true
 }));
 app.use(helmet());
 app.use(express.json());
-app.use(cors({
-  origin: env.CLIENT_URL,
-  credentials: true
-}))
 app.use(cookieParser())
 
 // Auth routes
