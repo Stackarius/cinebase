@@ -21,6 +21,7 @@ const commonSchema = z.object({
     JWT_SECRET: z.string(),
     JWT_EXPIRES_IN: z.string(),
     JWT_REFRESH_SECRET: z.string(),
+    CLIENT_URL: z.string()
 });
 
 export const env = commonSchema.parse(process.env);

@@ -6,6 +6,7 @@ import authRoutes from './modules/auth/auth.routes'
 import movieRoutes from './modules/movies/movie.routes'
 import usersRoutes from './modules/users/users.routes'
 import cookieParser from 'cookie-parser';
+import { env } from './config';
 
 const app: Express = express();
 
@@ -16,6 +17,10 @@ app.use(cors({
 }));
 app.use(helmet());
 app.use(express.json());
+app.use(cors({
+  origin: env.CLIENT_URL,
+  credentials: true
+}))
 app.use(cookieParser())
 
 // Auth routes
