@@ -9,37 +9,33 @@ import { env } from "../../config";
 
 const ACCESS_TOKEN_COOKIE = "accessToken";
 const REFRESH_TOKEN_COOKIE = "refreshToken";
+const isProduction = env.NODE_ENV === "production";
+const authCookieOptions = {
+    httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" as const : "lax" as const,
+};
 
 const setAuthCookies = (
     res: Response,
     tokens: { accessToken: string; refreshToken: string },
 ): void => {
     res.cookie(ACCESS_TOKEN_COOKIE, tokens.accessToken, {
-        httpOnly: true,
-        secure: env.NODE_ENV === "production",
-        sameSite: "lax",
+        ...authCookieOptions,
         path: "/api",
         maxAge: 15 * 60 * 1000,
     });
 
     res.cookie(REFRESH_TOKEN_COOKIE, tokens.refreshToken, {
-        httpOnly: true,
-        secure: env.NODE_ENV === "production",
-        sameSite: "lax",
+        ...authCookieOptions,
         path: "/api/auth",
         maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 };
 
 const clearAuthCookies = (res: Response): void => {
-    const cookieOptions = {
-        httpOnly: true,
-        secure: env.NODE_ENV === "production",
-        sameSite: "lax" as const,
-    };
-
-    res.clearCookie(ACCESS_TOKEN_COOKIE, { ...cookieOptions, path: "/api" });
-    res.clearCookie(REFRESH_TOKEN_COOKIE, { ...cookieOptions, path: "/api/auth" });
+    res.clearCookie(ACCESS_TOKEN_COOKIE, { ...authCookieOptions, path: "/api" });
+    res.clearCookie(REFRESH_TOKEN_COOKIE, { ...authCookieOptions, path: "/api/auth" });
 };
 
 // register user
