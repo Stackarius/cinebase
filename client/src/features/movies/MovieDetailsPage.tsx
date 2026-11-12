@@ -70,7 +70,7 @@ const MovieDetailsPage = () => {
     : null;
 
   return (
-    <section className="custom-scrollbar relative h-dvh min-h-0 min-w-0 flex-1 overflow-y-auto bg-gray-800 px-6 pb-12 sm:px-10">
+    <section className="custom-scrollbar relative h-dvh min-h-0 min-w-0 flex-1 overflow-y-auto bg-gray-800 px-4 pb-24 sm:px-6 md:pb-12 lg:px-10">
       <Header />
       <main className="pt-8">
         <Link
@@ -117,7 +117,7 @@ const MovieDetailsPage = () => {
                     {movie.tagline}
                   </p>
                 )}
-                <h1 id="movie-title" className="text-4xl font-extrabold text-white sm:text-6xl">
+                <h1 id="movie-title" className="break-words text-3xl font-extrabold text-white sm:text-5xl lg:text-6xl">
                   {movie.title}
                 </h1>
 

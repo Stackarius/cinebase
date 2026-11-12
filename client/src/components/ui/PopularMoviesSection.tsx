@@ -31,7 +31,7 @@ const PopularMoviesSection = ({
   return (
     <section aria-labelledby="popular-movies-heading">
       <div className="mb-5 mt-8 flex items-center justify-between">
-        <h3 id="popular-movies-heading" className="text-2xl font-semibold text-white">
+        <h3 id="popular-movies-heading" className="text-xl font-semibold text-white sm:text-2xl">
           Popular on CineBase
         </h3>
         {!loading && !error && movies.length > 3 && (
@@ -81,7 +81,7 @@ const PopularMoviesSection = ({
                 key={movie.id}
                 to={`/movies/${movie.id}`}
                 aria-label={`View details for ${movie.title}`}
-                className="group relative h-52 w-60 shrink-0 snap-start overflow-hidden rounded-md bg-gray-600 bg-cover bg-center"
+                className="group relative h-44 w-[min(75vw,15rem)] shrink-0 snap-start overflow-hidden rounded-md bg-gray-600 bg-cover bg-center sm:h-52 sm:w-60"
                 style={{
                   backgroundImage: movie.backdrop_path
                     ? `url(https://image.tmdb.org/t/p/w780${movie.backdrop_path})`

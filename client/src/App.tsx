@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 
 function App() {
   return (
-    <main className="flex h-dvh w-full items-stretch justify-between overflow-hidden">
+    <main className="flex h-dvh min-h-0 w-full min-w-0 items-stretch overflow-hidden">
       <Sidebar />
       <Outlet />
       <RightCol />

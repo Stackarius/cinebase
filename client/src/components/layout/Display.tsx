@@ -37,9 +37,9 @@ const Display = () => {
   }, [retryCount]);
 
   return (
-    <section className="custom-scrollbar relative h-dvh min-h-0 min-w-0 flex-1 overflow-y-auto bg-gray-800 px-10">
+    <section className="custom-scrollbar relative h-dvh min-h-0 min-w-0 flex-1 overflow-y-auto bg-gray-800 px-4 pb-20 sm:px-6 md:pb-6 lg:px-10">
       <Header />
-      <main className="pt-20">
+      <main className="pt-5 sm:pt-8 lg:pt-12">
         <FeaturedMovieCarousel movies={movies} loading={loading} />
         <PopularMoviesSection
           movies={movies}

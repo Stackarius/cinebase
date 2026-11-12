@@ -26,7 +26,7 @@ useEffect(() => {
 
   return (
     <div
-      className="relative flex h-65 w-full flex-col justify-between rounded-2xl bg-cyan-900 bg-cover bg-center px-8 py-4 transition-all duration-500"
+      className="relative flex min-h-60 w-full flex-col justify-between rounded-2xl bg-cyan-900 bg-cover bg-center px-4 py-4 transition-all duration-500 sm:min-h-65 sm:px-8"
       style={{
         backgroundImage: activeMovie?.backdrop_path
           ? `url(https://image.tmdb.org/t/p/w1280${activeMovie.backdrop_path})`
@@ -34,7 +34,7 @@ useEffect(() => {
       }}
     >
       <div className="absolute inset-0 rounded-2xl bg-black/50" />
-      <h3 className="relative z-10 mt-3 text-3xl font-black text-white">
+      <h3 className="relative z-10 mt-3 line-clamp-2 text-2xl font-black text-white sm:text-3xl">
         {activeMovie?.title ?? (loading ? "Loading movies..." : "No movies to show")}
       </h3>
       {activeMovie && (

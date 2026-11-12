@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const RightCol = () => {
   return (
-    <aside className="flex h-dvh w-[22%] min-w-60 flex-col gap-8 overflow-y-auto border-l border-white/5 bg-gray-900 px-5 py-8 text-white">
+    <aside className="hidden h-dvh w-72 shrink-0 flex-col gap-8 overflow-y-auto border-l border-white/5 bg-gray-900 px-5 py-8 text-white 2xl:flex">
       <header className="flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-cyan-300/80">

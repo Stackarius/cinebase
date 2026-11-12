@@ -7,12 +7,12 @@ const LoginPage = () => {
   const { register, handleSubmit, errors, isSubmitting, submitError } = useLoginForm();
 
   return (
-    <div className="flex min-h-dvh justify-center items-center bg-gray-800 px-40 ">
+    <div className="flex min-h-dvh items-center justify-center bg-gray-800 px-4 py-8 sm:px-8 lg:px-16">
       {/* container */}
-      <div className="w-full h-120 flex justify-between items-start rounded-lg overflow-clip">
+      <div className="flex h-auto w-full max-w-6xl flex-col overflow-hidden rounded-lg md:min-h-120 md:flex-row">
         {/* left side */}
         <div
-          className="relative h-full p-8 w-1/2 flex flex-col justify-between bg-cover bg-center"
+          className="relative hidden min-h-56 w-full flex-col justify-between bg-cover bg-center p-8 md:flex md:min-h-0 md:w-1/2"
           style={{ backgroundImage: `url(${theater})` }}
         >
           <div className="absolute inset-0 bg-black/30" />
@@ -24,7 +24,7 @@ const LoginPage = () => {
 
           {/*  */}
           <div className="z-10">
-            <h2 className="text-white text-4xl font-semibold">Your Movie Life <br /><span className="bg-cyan-400 font-black bg-clip-text text-transparent">Beautifully</span> Framed</h2>
+            <h2 className="text-3xl font-semibold text-white lg:text-4xl">Your Movie Life <br /><span className="bg-cyan-400 font-black bg-clip-text text-transparent">Beautifully</span> Framed</h2>
             <div className="flex gap-2 my-3">
               <span className="block h-1 w-14 bg-cyan-400/70 rounded"></span>
               <span className="block h-1 w-14 bg-cyan-400/80 rounded"></span>
@@ -33,7 +33,7 @@ const LoginPage = () => {
           </div>
         </div>
         {/* right side */}
-        <div className="p-20 bg-white h-full w-[50%]">
+        <div className="w-full bg-white p-6 sm:p-10 md:w-1/2 md:p-8 lg:p-12 xl:p-16">
           <h2 className="text-3xl font-bold mb-5">Login <span className="inline-block h-2 w-2 bg-cyan-700/70 rounded"></span>
 
           </h2>
@@ -77,7 +77,7 @@ const LoginPage = () => {
           </form>
 
           {/* dont have an account */}
-          <p>Don't have an account? <Link to="/register" className="text-cyan-700 font-semibold ">Create Account</Link></p>
+          <p className="text-sm sm:text-base">Don't have an account? <Link to="/register" className="font-semibold text-cyan-700">Create Account</Link></p>
         </div>
       </div>
     </div>
